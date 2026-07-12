@@ -45,10 +45,10 @@ async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
             "maxTimeout": 60000
         }
 
-        response = requests.post(f"{FLARESOLVERR_URL}/v1/", json=payload, timeout=120)
+        response = requests.post(f"{FLARESOLVERR_URL}/v1", json=payload, timeout=120)
         result = response.json()
 
-        logger.info(f"FlareSolverr Response: {result}")
+        logger.info(f"FlareSolverr Response for {title}: {result}")
 
         if result.get("status") != "ok":
             await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message', str(result))[:400]}", ephemeral=True)
@@ -108,7 +108,7 @@ class AdSoyadModal(discord.ui.Modal, title="👤 Ad Soyad Sorgu"):
         if self.ilce.value.strip(): url += f"&ilce={self.ilce.value}"
         await sorgu_yap(interaction, "Ad Soyad Sorgu", url)
 
-# Twitter Modalları
+# Twitter
 class TwitterUserModal(discord.ui.Modal, title="🐦 Twitter Kullanıcı Sorgu"):
     q = discord.ui.TextInput(label="Kullanıcı Adı", placeholder="kullanici", required=True)
     async def on_submit(self, interaction: discord.Interaction):
@@ -127,7 +127,7 @@ class TwitterPassModal(discord.ui.Modal, title="🐦 Twitter Şifre Sorgu"):
         url = f"https://ajanss.tr/api/twitter.php?type=pass&q={self.q.value}"
         await sorgu_yap(interaction, "Twitter Şifre", url)
 
-# Instagram Modalları
+# Instagram
 class InstagramUserModal(discord.ui.Modal, title="📸 IG Kullanıcı"):
     q = discord.ui.TextInput(label="Kullanıcı Adı", placeholder="pompomiller", required=True)
     async def on_submit(self, interaction: discord.Interaction):
