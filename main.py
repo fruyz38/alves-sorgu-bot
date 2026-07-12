@@ -45,14 +45,13 @@ async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
             "maxTimeout": 60000
         }
 
-        full_url = f"{FLARESOLVERR_URL}/v1"
-        response = requests.post(full_url, json=payload, timeout=120)
+        response = requests.post(f"{FLARESOLVERR_URL}/v1", json=payload, timeout=120)
+        logger.info(f"FlareSolverr Raw Response: {response.text[:500]}")
+
         result = response.json()
 
-        logger.info(f"FlareSolverr Response for {title}: {result}")
-
         if result.get("status") != "ok":
-            await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message', str(result))[:400]}", ephemeral=True)
+            await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message', response.text[:300])}", ephemeral=True)
             return
 
         html = result["solution"]["response"]
