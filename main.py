@@ -44,7 +44,7 @@ async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
         result = response.json()
 
         if result.get("status") != "ok":
-            await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message')}", ephemeral=True)
+            await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message', 'Bilinmiyor')}", ephemeral=True)
             return
 
         html = result["solution"]["response"]
@@ -159,52 +159,52 @@ class DiscordIdModal(discord.ui.Modal, title="🔵 Discord ID Sorgu"):
         url = f"https://ajanss.tr/api/discordid.php?id={self.q.value}"
         await sorgu_yap(interaction, "Discord ID", url)
 
-# ====================== PANEL ======================
+# ====================== PANELLER ======================
 class SorguPaneli(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="TC Sorgula", style=discord.ButtonStyle.primary, emoji="🔍", row=0)
+    @discord.ui.button(label="TC Sorgula", style=discord.ButtonStyle.primary, emoji="🔍", row=0, custom_id="btn_tc")
     async def tc_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(TcModal())
 
-    @discord.ui.button(label="Ad Soyad", style=discord.ButtonStyle.primary, emoji="👤", row=0)
+    @discord.ui.button(label="Ad Soyad", style=discord.ButtonStyle.primary, emoji="👤", row=0, custom_id="btn_adsoyad")
     async def adsoyad_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(AdSoyadModal())
 
-    @discord.ui.button(label="🐦 Twitter Kullanıcı", style=discord.ButtonStyle.primary, row=1)
+    @discord.ui.button(label="🐦 Twitter Kullanıcı", style=discord.ButtonStyle.primary, row=1, custom_id="btn_twitter_user")
     async def twitter_user_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(TwitterUserModal())
 
-    @discord.ui.button(label="🐦 Twitter Mail", style=discord.ButtonStyle.primary, row=1)
+    @discord.ui.button(label="🐦 Twitter Mail", style=discord.ButtonStyle.primary, row=1, custom_id="btn_twitter_email")
     async def twitter_mail_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(TwitterEmailModal())
 
-    @discord.ui.button(label="🐦 Twitter Şifre", style=discord.ButtonStyle.primary, row=1)
+    @discord.ui.button(label="🐦 Twitter Şifre", style=discord.ButtonStyle.primary, row=1, custom_id="btn_twitter_pass")
     async def twitter_pass_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(TwitterPassModal())
 
-    @discord.ui.button(label="📸 IG Kullanıcı", style=discord.ButtonStyle.primary, row=2)
+    @discord.ui.button(label="📸 IG Kullanıcı", style=discord.ButtonStyle.primary, row=2, custom_id="btn_ig_user")
     async def ig_user_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(InstagramUserModal())
 
-    @discord.ui.button(label="📸 IG Mail", style=discord.ButtonStyle.primary, row=2)
+    @discord.ui.button(label="📸 IG Mail", style=discord.ButtonStyle.primary, row=2, custom_id="btn_ig_email")
     async def ig_mail_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(InstagramEmailModal())
 
-    @discord.ui.button(label="📸 IG ID", style=discord.ButtonStyle.primary, row=2)
+    @discord.ui.button(label="📸 IG ID", style=discord.ButtonStyle.primary, row=2, custom_id="btn_ig_id")
     async def ig_id_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(InstagramIdModal())
 
-    @discord.ui.button(label="📸 IG Telefon", style=discord.ButtonStyle.primary, row=3)
+    @discord.ui.button(label="📸 IG Telefon", style=discord.ButtonStyle.primary, row=3, custom_id="btn_ig_phone")
     async def ig_phone_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(InstagramPhoneModal())
 
-    @discord.ui.button(label="📸 IG İsim", style=discord.ButtonStyle.primary, row=3)
+    @discord.ui.button(label="📸 IG İsim", style=discord.ButtonStyle.primary, row=3, custom_id="btn_ig_name")
     async def ig_name_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(InstagramNameModal())
 
-    @discord.ui.button(label="🔵 Discord ID", style=discord.ButtonStyle.primary, row=4)
+    @discord.ui.button(label="🔵 Discord ID", style=discord.ButtonStyle.primary, row=4, custom_id="btn_discord_id")
     async def discord_id_btn(self, interaction: discord.Interaction, button: discord.ui.Button):
         await interaction.response.send_modal(DiscordIdModal())
 
@@ -212,7 +212,7 @@ class SorguGirisButon(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(label="Sorgu Panelini Aç", style=discord.ButtonStyle.success)
+    @discord.ui.button(label="Sorgu Panelini Aç", style=discord.ButtonStyle.success, custom_id="btn_giris_persistent")
     async def sorgu_ac(self, interaction: discord.Interaction, button: discord.ui.Button):
         view = SorguPaneli()
         embed = discord.Embed(title="🪪 ALVES SORGU PANELİ", description="Aşağıdaki butonlardan istediğini seç.", color=discord.Color.blue())
