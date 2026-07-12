@@ -16,7 +16,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', write_through
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-FLARESOLVERR_URL = "https://flaresolverr-gvbi.onrender.com/v1"   # Senin URL'n
+FLARESOLVERR_URL = "https://flaresolverr-gvbi.onrender.com/v1"  
 
 # ====================== FLASK ======================
 app = Flask(__name__)
@@ -39,12 +39,21 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
     await interaction.response.defer(ephemeral=True)
     try:
-        payload = {"cmd": "request.get", "url": url, "maxTimeout": 60000}
-        response = requests.post(f"{FLARESOLVERR_URL}/", json=payload, timeout=90)
+        payload = {
+            "cmd": "request.get",
+            "url": url,
+            "maxTimeout": 60000,
+            "returnOnlyCookies": False
+        }
+
+        response = requests.post(f"{FLARESOLVERR_URL}/", json=payload, timeout=120)
         result = response.json()
 
+        logger.info(f"FlareSolverr Response for {title}: {result}")
+
         if result.get("status") != "ok":
-            await interaction.followup.send(f"❌ FlareSolverr Hatası: {result.get('message', 'Bilinmiyor')}", ephemeral=True)
+            error_msg = result.get('message', str(result))
+            await interaction.followup.send(f"❌ FlareSolverr Hatası: {error_msg[:400]}", ephemeral=True)
             return
 
         html = result["solution"]["response"]
@@ -61,7 +70,7 @@ async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
 
     except Exception as e:
         logger.error(f"Hata ({title}): {e}")
-        await interaction.followup.send(f"❌ Hata: {str(e)[:250]}", ephemeral=True)
+        await interaction.followup.send(f"❌ Hata: {str(e)[:300]}", ephemeral=True)
 
 def format_api_response(title: str, raw_text: str):
     try:
