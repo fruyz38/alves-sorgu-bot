@@ -16,7 +16,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', write_through
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-FLARESOLVERR_URL = os.getenv("FLARESOLVERR_URL", "https://flaresolverr-xxxx.onrender.com/v1")  
+FLARESOLVERR_URL = "https://flaresolverr-gvbi.onrender.com/v1"   # Senin URL'n
 
 # ====================== FLASK ======================
 app = Flask(__name__)
