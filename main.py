@@ -45,7 +45,8 @@ async def sorgu_yap(interaction: discord.Interaction, title: str, url: str):
             "maxTimeout": 60000
         }
 
-        response = requests.post(f"{FLARESOLVERR_URL}/v1", json=payload, timeout=120)
+        full_url = f"{FLARESOLVERR_URL}/v1"
+        response = requests.post(full_url, json=payload, timeout=120)
         result = response.json()
 
         logger.info(f"FlareSolverr Response for {title}: {result}")
