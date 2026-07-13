@@ -1,4 +1,4 @@
-discord.py
-flask
-cloudscraper
-requests
+discord.py==2.3.2
+requests==2.31.0
+Flask==3.0.0
+aiohttp==3.9.0
